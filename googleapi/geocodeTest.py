@@ -1,6 +1,14 @@
-# This is a script made for testing out the google APIs
-# for geocode, timezone and elevation
-import requests
+#######################################################################
+# This is a script made for testing out the google APIs               #
+# for geocode, timezone and elevation                                 #
+# Written by: almyk                                                   #
+#######################################################################
+# How to use:                                                         #
+#       1.  need to store your google api key inside file api.key     #
+#       2.  run the script using python3: python3 geocodeTest.py      #
+#       3.  enter address or location you want to look up, q for quit #
+#######################################################################
+
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
 import time, datetime
