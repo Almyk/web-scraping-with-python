@@ -13,7 +13,6 @@ import json
 keyFile = open("api.key", 'r')
 key = keyFile.readline()
 keyFile.close()
-address = "1+Science+Park+Boston+MA+02114"
 
 def getGeoInfo(address):
     global key
@@ -42,12 +41,17 @@ def getElevation(lat, lng):
 def getAddress(jsonObj):
     return jsonObj.get("results")[0].get("formatted_address")
 
-geoInfo = getGeoInfo(address)
-latitude = getLatitude(geoInfo)
-longitude = getLongitude(geoInfo)
-timeZone = getTimeZoneUsingLongAndLat(latitude, longitude)
-elevation = getElevation(latitude, longitude)
-formattedAddress = getAddress(geoInfo)
-print("Address: "+formattedAddress)
-print("Time Zone: "+timeZone)
-print("Elevation: %.2fm"%elevation)
+# address = "1+Science+Park+Boston+MA+02114"
+address = input("Enter address or location(q to quit): ")
+while(address != "q"):
+    address = address.replace(' ', '+')
+    geoInfo = getGeoInfo(address)
+    latitude = getLatitude(geoInfo)
+    longitude = getLongitude(geoInfo)
+    timeZone = getTimeZoneUsingLongAndLat(latitude, longitude)
+    elevation = getElevation(latitude, longitude)
+    formattedAddress = getAddress(geoInfo)
+    print("Address: "+formattedAddress)
+    print("Time Zone: "+timeZone)
+    print("Elevation: %.2fm"%elevation)
+    address = input("Enter address(q to quit): ")
