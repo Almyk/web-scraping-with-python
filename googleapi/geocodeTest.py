@@ -49,7 +49,6 @@ def getElevation(lat, lng):
 def getAddress(jsonObj):
     return jsonObj.get("results")[0].get("formatted_address")
 
-# address = "1+Science+Park+Boston+MA+02114"
 address = input("Enter address or location(q to quit): ")
 while(address != "q"):
     address = address.replace(' ', '+')
