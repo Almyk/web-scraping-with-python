@@ -69,4 +69,4 @@ while(address != "q"):
     print("Time Zone: "+timeZone)
     print("Elevation: %.2fm"%elevation)
     print()
-    address = input("Enter address(q to quit): ")
+    address = input("Enter address or location(q to quit): ")
