@@ -13,6 +13,7 @@ from urllib.request import urlopen
 from bs4 import BeautifulSoup
 import time, datetime
 import json
+from pytz import timezone
 
 # alternative way to get timestamp:
 # timestamp = time.mktime(datetime.datetime.today().timetuple())
@@ -38,7 +39,11 @@ def getTimeZoneUsingLongAndLat(lat, lng):
     timestamp = time.time()
     response = urlopen("https://maps.googleapis.com/maps/api/timezone/json?location=%f"%(lat)+",%f"%(lng)+"&timestamp=%f"%(timestamp)+"&key="+key).read().decode('utf-8')
     jsonObj = json.loads(response)
-    return jsonObj.get("timeZoneName")
+    timeZoneId = jsonObj.get("timeZoneId")
+    locTZ = timezone(timeZoneId)
+    locTime = datetime.datetime.now(locTZ)
+    formattedTime = locTime.strftime("%d/%m/%Y %H:%M:%S")
+    return jsonObj.get("timeZoneName") + " (" + formattedTime + ")"
 
 def getElevation(lat, lng):
     global key
@@ -48,6 +53,7 @@ def getElevation(lat, lng):
 
 def getAddress(jsonObj):
     return jsonObj.get("results")[0].get("formatted_address")
+
 
 address = input("Enter address or location(q to quit): ")
 while(address != "q"):
