@@ -1,6 +1,7 @@
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
 import pymysql
+import re
 
 f = open('pw.key', 'r')
 pw = f.readline().strip()
@@ -38,8 +39,18 @@ def searchDepth(targetPageId, currentPageId, linkTree, depth):
             # No links found. Cannot continue at this node
             return {}
     if targetPageId in linkTree.keys():
-        print("TARGET "+str(targetPageId)+" FOUND!")
-        raise SolutionFound("PAGE: "+str(currentPageId))
+        cur.execute("SELECT url FROM pages WHERE id = %d"%targetPageId)
+        tarP = cur.fetchone()
+        tarP = re.sub("\'\(\)", "", tarP[0])
+        tarP = re.sub("^/wiki/", "", tarP)
+        tarP = re.sub("_", " ", tarP)
+        print("TARGET ("+str(targetPageId)+") "+tarP+" FOUND!")
+        cur.execute("SELECT url FROM pages WHERE id = %d"%currentPageId)
+        currP = cur.fetchone()
+        currP = re.sub("\'\(\)", "", currP[0])
+        currP = re.sub("^/wiki/", "", currP)
+        currP = re.sub("_", " ", currP)
+        raise SolutionFound("PAGE: ("+str(currentPageId)+") "+str(currP))
 
     for branchKey, branchValue in linkTree.items():
         try:
@@ -48,11 +59,16 @@ def searchDepth(targetPageId, currentPageId, linkTree, depth):
                     branchValue, depth-1)
         except SolutionFound as e:
             print(e.message)
-            raise SolutionFound("PAGE: "+str(currentPageId))
+            cur.execute("SELECT url FROM pages WHERE id = %d"%currentPageId)
+            currP = cur.fetchone()
+            currP = re.sub("\'\(\)", "", currP[0])
+            currP = re.sub("^/wiki/", "", currP)
+            currP = re.sub("_", " ", currP)
+            raise SolutionFound("PAGE: ("+str(currentPageId)+") "+str(currP))
     return linkTree
 
 try:
-    searchDepth(1, 3, {}, 4)
+    searchDepth(2999, 1, {}, 4)
     print("No solution found")
 except SolutionFound as e:
     print(e.message)
