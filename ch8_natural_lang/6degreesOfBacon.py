@@ -2,6 +2,7 @@ from urllib.request import urlopen
 from bs4 import BeautifulSoup
 import pymysql
 import re
+import time
 
 f = open('pw.key', 'r')
 pw = f.readline().strip()
@@ -67,8 +68,9 @@ def searchDepth(targetPageId, currentPageId, linkTree, depth):
             raise SolutionFound("PAGE: ("+str(currentPageId)+") "+str(currP))
     return linkTree
 
+start_time = time.time()
 try:
-    searchDepth(2999, 1, {}, 4)
+    searchDepth(71048, 1, {}, 4)
     print("No solution found")
 except SolutionFound as e:
     print(e.message)
@@ -76,3 +78,5 @@ except SolutionFound as e:
 finally:
     cur.close()
     conn.close()
+time_taken = (time.time() - start_time)
+print("Finding the path took: %.3f seconds" % time_taken)
